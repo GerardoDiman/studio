@@ -8,7 +8,10 @@ import ContactSection from '@/components/sections/contact-section';
 import CtaSection from '@/components/sections/cta-section';
 import ServicesSection from '@/components/sections/services-section';
 import FaqSection from '@/components/sections/faq-section';
-import PlaceholderSection from '@/components/sections/placeholder-section'; // For sections not fully built yet
+import NuestroProcesoSection from '@/components/sections/nuestro-proceso-section';
+import ProyectosSection from '@/components/sections/proyectos-section';
+import TecnologiasSection from '@/components/sections/tecnologias-section';
+import TestimoniosSection from '@/components/sections/testimonios-section';
 
 export default function Home() {
   return (
@@ -17,11 +20,11 @@ export default function Home() {
       <AboutUsSection />
       <WhyChooseUsSection />
       <StatsSection />
-      <PlaceholderSection id="nuestro-proceso" title="Nuestro Proceso de Automatización" className="bg-background" />
+      <NuestroProcesoSection />
       <ServicesSection />
-      <PlaceholderSection id="proyectos" title="Proyectos Exitosos" className="bg-card" />
-      <PlaceholderSection id="tecnologias" title="Tecnologías y Socios Clave" />
-      <PlaceholderSection id="testimonios" title="Lo Que Dicen Nuestros Clientes" className="bg-card" />
+      <ProyectosSection />
+      <TecnologiasSection />
+      <TestimoniosSection />
       <FaqSection />
       <AiRecommendationSection />
       <CtaSection />
