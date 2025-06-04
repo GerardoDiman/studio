@@ -1,4 +1,3 @@
-
 'use client';
 
 import SectionWrapper from '@/components/shared/section-wrapper';
@@ -38,7 +37,7 @@ const processSteps = [
     dataAiHint: "deployment launch"
   },
   {
-    icon: Handshake, // Using Handshake as a more general icon for ongoing support
+    icon: Handshake, 
     title: '6. Soporte Continuo y Mejora',
     description: 'Ofrecemos soporte post-implementación, monitoreo y planes de mejora continua para maximizar el valor de tu inversión a largo plazo.',
     dataAiHint: "support partnership"
@@ -54,7 +53,12 @@ export default function NuestroProcesoSection() {
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {processSteps.map((step, index) => (
-          <InteractiveCard key={index} dataAiHint={step.dataAiHint} className="flex flex-col">
+          <InteractiveCard 
+            key={index} 
+            dataAiHint={step.dataAiHint} 
+            className="flex flex-col"
+            animationDelay={`${index * 100}ms`}
+          >
             <div className="flex items-center mb-4">
               <step.icon className="h-12 w-12 text-primary mr-4 shrink-0" />
               <h3 className="text-xl font-bold text-foreground">{step.title}</h3>

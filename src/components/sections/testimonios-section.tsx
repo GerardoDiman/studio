@@ -1,4 +1,3 @@
-
 'use client';
 
 import SectionWrapper from '@/components/shared/section-wrapper';
@@ -40,7 +39,11 @@ export default function TestimoniosSection() {
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {testimonials.map((testimonial, index) => (
-          <InteractiveCard key={index} className="flex flex-col items-center text-center p-8">
+          <InteractiveCard 
+            key={index} 
+            className="flex flex-col items-center text-center p-8"
+            animationDelay={`${index * 100}ms`}
+          >
             <div className="relative w-24 h-24 rounded-full overflow-hidden mb-6 shadow-lg">
               <Image
                 src={testimonial.imageSrc}

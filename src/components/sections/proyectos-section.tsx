@@ -1,4 +1,3 @@
-
 'use client';
 
 import SectionWrapper from '@/components/shared/section-wrapper';
@@ -53,7 +52,11 @@ export default function ProyectosSection() {
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {projects.map((project, index) => (
-          <InteractiveCard key={index} className="flex flex-col overflow-hidden">
+          <InteractiveCard 
+            key={index} 
+            className="flex flex-col overflow-hidden"
+            animationDelay={`${index * 100}ms`}
+          >
             <div className="relative w-full h-48">
               <Image
                 src={project.imageSrc}

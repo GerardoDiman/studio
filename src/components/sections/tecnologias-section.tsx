@@ -1,13 +1,11 @@
-
 'use client';
 
 import SectionWrapper from '@/components/shared/section-wrapper';
 import SectionTitle from '@/components/shared/section-title';
 import InteractiveCard from '@/components/shared/interactive-card';
 import Image from 'next/image';
-import { Code, Cloud, Database, Settings } from 'lucide-react'; // Added Settings for generic tech
+import { Code, Cloud, Database, Settings } from 'lucide-react';
 
-// Helper icon for Brain, if not available
 const Brain = (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
         <path d="M12 2a4.5 4.5 0 0 0-4.5 4.5v0a4.5 4.5 0 0 0-2.84 3.75a4.5 4.5 0 0 0 .18 8.5v0A4.5 4.5 0 0 0 12 22Z"/>
@@ -62,13 +60,17 @@ export default function TecnologiasSection() {
       <div className="mb-16">
         <h3 className="text-2xl md:text-3xl font-semibold text-primary text-center mb-8">Tecnologías que Dominamos</h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-          {technologies.map((tech) => (
-            <InteractiveCard key={tech.name} className="text-center p-4" dataAiHint={tech.dataAiHint}>
+          {technologies.map((tech, index) => (
+            <InteractiveCard 
+              key={tech.name} 
+              className="text-center p-4" 
+              dataAiHint={tech.dataAiHint}
+              animationDelay={`${index * 50}ms`}
+            >
               <div className="flex justify-center mb-3">
                 <tech.icon className="h-10 w-10 text-primary" />
               </div>
               <h4 className="text-md font-semibold text-foreground">{tech.name}</h4>
-              {/* Optional: <p className="text-xs text-muted-foreground">{tech.category}</p> */}
             </InteractiveCard>
           ))}
         </div>
@@ -77,8 +79,13 @@ export default function TecnologiasSection() {
       <div>
         <h3 className="text-2xl md:text-3xl font-semibold text-primary text-center mb-8">Nuestros Socios Estratégicos</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {partners.map((partner) => (
-            <InteractiveCard key={partner.name} className="text-center p-6" dataAiHint={partner.dataAiHint}>
+          {partners.map((partner, index) => (
+            <InteractiveCard 
+              key={partner.name} 
+              className="text-center p-6" 
+              dataAiHint={partner.dataAiHint}
+              animationDelay={`${index * 100}ms`}
+            >
               <div className="flex justify-center mb-4">
                 <Image src={partner.imageSrc} alt={partner.name} width={120} height={64} objectFit="contain" data-ai-hint={partner.dataAiHint} />
               </div>

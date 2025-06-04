@@ -34,7 +34,7 @@ body {
     --destructive-foreground: 0 0% 98%;
 
     --success: 130 55% 45%; /* Green for success states */
-    --success-foreground: 130 30% 95%; /* Light text for on-success elements */
+    --success-foreground: 0 0% 98%; /* Light text for on-success elements */
 
     --border: 0 0% 15%; /* Dark Gray Border #262626 */
     --input: 0 0% 10%; /* Input Background #1A1A1A */
@@ -87,7 +87,7 @@ body {
     --destructive-foreground: 0 0% 98%;
 
     --success: 130 55% 45%; /* Green for success states */
-    --success-foreground: 130 30% 95%; /* Light text for on-success elements */
+    --success-foreground: 0 0% 98%; /* Light text for on-success elements */
 
     --border: 0 0% 15%; /* Dark Gray Border #262626 */
     --input: 0 0% 10%; /* Input Background #1A1A1A */
@@ -140,7 +140,7 @@ body {
   animation: slide-up-fade-in 0.8s ease-out forwards;
 }
 
-/* Base styles for animate-on-scroll elements */
+/* Base styles for animate-on-scroll elements (SectionWrapper) */
 .scroll-animate {
   opacity: 0;
   transform: translateY(20px);
@@ -153,6 +153,20 @@ body {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Animation for InteractiveCard entry */
+.card-entry-animation {
+  opacity: 0;
+  transform: translateY(75px); /* Slide from further down */
+  transition-property: opacity, transform;
+  transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1); /* easeOutQuart */
+  transition-duration: 700ms;
+}
+.card-entry-animation-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 
 /* Specific style for the final CTA button */
 .btn-cta-special {
