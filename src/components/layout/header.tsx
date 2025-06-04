@@ -9,17 +9,17 @@ import { cn } from '@/lib/utils';
 import NavLink from './nav-link';
 
 const navItems = [
-  { href: '#inicio', label: 'Inicio' },
-  { href: '#quienes-somos', label: 'Quiénes Somos' },
-  { href: '#por-que-elegirnos', label: 'Por Qué Elegirnos' },
-  { href: '#nuestro-proceso', label: 'Nuestro Proceso' },
-  { href: '#servicios', label: 'Servicios' },
-  { href: '#proyectos', label: 'Proyectos' },
-  { href: '#tecnologias', label: 'Tecnologías' },
-  { href: '#testimonios', label: 'Testimonios' },
-  { href: '#faq', label: 'FAQ' },
-  { href: '#recomendacion-ia', label: 'Recomendación IA' },
-  { href: '#contacto', label: 'Contacto' },
+  { href: '/', label: 'Inicio' },
+  { href: '/#quienes-somos', label: 'Quiénes Somos' },
+  { href: '/#por-que-elegirnos', label: 'Por Qué Elegirnos' },
+  { href: '/#nuestro-proceso', label: 'Nuestro Proceso' },
+  { href: '/servicios', label: 'Servicios' },
+  { href: '/proyectos', label: 'Proyectos' },
+  { href: '/tecnologias', label: 'Tecnologías' },
+  { href: '/testimonios', label: 'Testimonios' },
+  { href: '/faq', label: 'FAQ' },
+  { href: '/recomendacion-ia', label: 'Recomendación IA' },
+  { href: '/contacto', label: 'Contacto' },
 ];
 
 export default function Header() {

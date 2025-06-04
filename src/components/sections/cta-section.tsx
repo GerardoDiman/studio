@@ -20,7 +20,7 @@ export default function CtaSection() {
         size="lg" 
         className="btn-cta-special px-10 py-6 text-lg font-semibold rounded-lg transform hover:scale-105 transition-all duration-300 shadow-xl"
       >
-        <Link href="#contacto">Agenda una Consulta Gratuita</Link>
+        <Link href="/contacto">Agenda una Consulta Gratuita</Link>
       </Button>
     </SectionWrapper>
   );

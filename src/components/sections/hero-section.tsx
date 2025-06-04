@@ -54,7 +54,7 @@ export default function HeroSection() {
           size="lg" 
           className="bg-primary text-primary-foreground hover:bg-primary/90 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl px-10 py-6 text-lg font-semibold rounded-lg"
         >
-          <Link href="#contacto">Contáctanos Hoy</Link>
+          <Link href="/contacto">Contáctanos Hoy</Link>
         </Button>
       </div>
     </SectionWrapper>
