@@ -3,8 +3,8 @@
 
 import SectionWrapper from '@/components/shared/section-wrapper';
 import SectionTitle from '@/components/shared/section-title';
-import Image from 'next/image';
 import TypingEffect from '@/components/client/typing-effect';
+import LottiePlayer from '@/components/client/lottie-player';
 
 export default function AboutUsSection() {
   return (
@@ -16,7 +16,7 @@ export default function AboutUsSection() {
             <TypingEffect texts={['Nuestra Misión']} className="text-2xl font-semibold text-primary" />
           </h3>
           <p>
-            En DIMAN AUTOMATIONS, nuestra misión es empoderar a las empresas mediante la implementación de soluciones de automatización inteligente que optimicen procesos, reduzcan costos y fomenten la innovación. Nos dedicamos a transformar desafíos complejos en eficiencias operativas tangibles.
+            En DIMAN AUTOMATIONS, nuestra misión es empoderar a las empresas mediante la implementación de soluciones de automatización inteligente que optimicen procesos, reduzan costos y fomenten la innovación. Nos dedicamos a transformar desafíos complejos en eficiencias operativas tangibles.
           </p>
           <h3 className="text-2xl font-semibold text-primary">
             <TypingEffect texts={['Nuestra Visión']} className="text-2xl font-semibold text-primary" />
@@ -35,14 +35,11 @@ export default function AboutUsSection() {
             <li><span className="font-medium text-foreground">Compromiso:</span> Estamos dedicados al éxito a largo plazo de nuestros clientes.</li>
           </ul>
         </div>
-        <div className="rounded-lg overflow-hidden shadow-xl aspect-w-4 aspect-h-3">
-          <Image
-            src="https://placehold.co/600x450/2d3748/f97316?text=Equipo+DIMAN"
-            alt="Equipo de DIMAN AUTOMATIONS"
-            width={600}
-            height={450}
-            className="object-cover w-full h-full"
-            data-ai-hint="team meeting"
+        <div className="rounded-lg overflow-hidden shadow-xl flex items-center justify-center aspect-w-4 aspect-h-3 bg-card/50 p-4">
+          <LottiePlayer
+            path="https://assets3.lottiefiles.com/packages/lf20_V9t630.json" // Example Automation/Gears Lottie
+            className="w-full h-auto max-w-[350px] md:max-w-[400px]"
+            aria-label="Animación de engranajes girando, representando la automatización y los procesos."
           />
         </div>
       </div>
