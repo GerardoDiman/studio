@@ -1,6 +1,6 @@
 
 'use client';
-import Image from 'next/image';
+// import Image from 'next/image'; // No longer needed for background
 import { Button } from '@/components/ui/button';
 import SectionWrapper from '@/components/shared/section-wrapper';
 import Link from 'next/link';
@@ -9,28 +9,26 @@ import TypingEffect from '@/components/client/typing-effect';
 export default function HeroSection() {
   return (
     <SectionWrapper id="inicio" className="!py-0 min-h-screen flex items-center justify-center relative overflow-hidden" applyAnimation={false}>
-      {/* Background Image for Desktop */}
-      <Image
-        src="https://placehold.co/1920x1080.png"
-        alt="Automatización de procesos empresariales"
-        layout="fill"
-        objectFit="cover"
-        quality={90}
-        priority
-        className="hidden md:block md:bg-fixed" // bg-fixed for parallax effect on desktop
-        data-ai-hint="automation business"
-      />
-      {/* Background Image for Mobile */}
-      <Image
-        src="https://placehold.co/768x1024.png"
-        alt="Automatización de procesos empresariales en móvil"
-        layout="fill"
-        objectFit="cover"
-        quality={80}
-        priority
-        className="md:hidden" // No parallax for mobile
-        data-ai-hint="automation mobile"
-      />
+      {/* Background Video */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline // Important for iOS
+        className="absolute inset-0 w-full h-full object-cover -z-10" // Placed behind the overlay
+        // Poster can be used to show an image while the video loads
+        // poster="https://placehold.co/1920x1080.png" 
+      >
+        {/* 
+          Replace this with the path to your video. 
+          For local videos, place them in the `public` folder. e.g., /videos/hero-background.mp4
+          For external videos, use the full URL.
+        */}
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+        {/* You can add more <source> elements for different video formats if needed */}
+        Tu navegador no soporta el tag de video.
+      </video>
+      
       <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
       
       <div className="relative z-10 text-center p-4 animate-slide-up-fade-in max-w-3xl">
