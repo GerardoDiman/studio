@@ -1,8 +1,10 @@
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
+import ScrollToTopButton from '@/components/client/scroll-to-top-button';
 
 export const metadata: Metadata = {
   title: 'DIMAN Automations - Efficiency Amplified',
@@ -26,6 +28,7 @@ export default function RootLayout({
         <main>{children}</main>
         <Footer />
         <Toaster />
+        <ScrollToTopButton />
       </body>
     </html>
   );
