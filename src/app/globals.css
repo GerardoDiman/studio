@@ -33,6 +33,9 @@ body {
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
+    --success: 130 55% 45%; /* Green for success states */
+    --success-foreground: 130 30% 95%; /* Light text for on-success elements */
+
     --border: 0 0% 15%; /* Dark Gray Border #262626 */
     --input: 0 0% 10%; /* Input Background #1A1A1A */
     --ring: 27 95% 53%; /* Orange for focus rings */
@@ -82,6 +85,9 @@ body {
 
     --destructive: 0 72.2% 50.6%; /* Adjusted for dark */
     --destructive-foreground: 0 0% 98%;
+
+    --success: 130 55% 45%; /* Green for success states */
+    --success-foreground: 130 30% 95%; /* Light text for on-success elements */
 
     --border: 0 0% 15%; /* Dark Gray Border #262626 */
     --input: 0 0% 10%; /* Input Background #1A1A1A */

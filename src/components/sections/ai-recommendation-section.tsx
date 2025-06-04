@@ -63,8 +63,7 @@ export default function AiRecommendationSection() {
       toast({
         title: '¡Éxito!',
         description: 'Recomendación copiada al portapapeles.',
-        variant: 'default', // This will be default, will need custom styling for green bg
-        className: 'bg-green-600 border-green-600 text-white dark:bg-green-700 dark:border-green-700 dark:text-white',
+        variant: 'success',
       });
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);

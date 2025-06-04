@@ -39,7 +39,7 @@ export default function ContactSection() {
     toast({
       title: "Mensaje Enviado",
       description: "Gracias por contactarnos. Nos pondremos en contacto contigo pronto.",
-      className: 'bg-green-600 border-green-600 text-white dark:bg-green-700 dark:border-green-700 dark:text-white', // Success style
+      variant: "success",
     });
     setFormData({ name: '', email: '', message: '' }); // Reset form
   };
