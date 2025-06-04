@@ -4,7 +4,8 @@
 import SectionWrapper from '@/components/shared/section-wrapper';
 import SectionTitle from '@/components/shared/section-title';
 import InteractiveCard from '@/components/shared/interactive-card';
-import { Handshake, Lightbulb, Users, DollarSign } from 'lucide-react'; // Mapped icons
+import { Handshake, Lightbulb, Users, DollarSign } from 'lucide-react';
+import TypingEffect from '@/components/client/typing-effect';
 
 const features = [
   {
@@ -20,7 +21,7 @@ const features = [
     dataAiHint: "lightbulb innovation"
   },
   {
-    icon: Users, // Using Users as a general icon for client focus / tailored solutions
+    icon: Users, 
     title: 'Enfoque Personalizado',
     description: 'Cada negocio es único. Adaptamos nuestras soluciones a tus necesidades específicas para maximizar el impacto.',
     dataAiHint: "users collaboration"
@@ -39,11 +40,13 @@ export default function WhyChooseUsSection() {
       <SectionTitle>¿Por Qué Elegir DIMAN AUTOMATIONS?</SectionTitle>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {features.map((feature, index) => (
-          <InteractiveCard key={index} className="text-center" dataAiHint={feature.dataAiHint}>
+          <InteractiveCard key={index} className="text-center" dataAiHint={feature.dataAiHint} animationDelay={`${index * 150}ms`}>
             <div className="flex justify-center mb-6">
               <feature.icon className="h-16 w-16 text-primary" />
             </div>
-            <h3 className="text-xl font-bold text-foreground mb-3">{feature.title}</h3>
+            <h3 className="text-xl font-bold text-foreground mb-3 h-14 flex items-center justify-center">
+              <TypingEffect texts={[feature.title]} className="text-xl font-bold text-foreground" />
+            </h3>
             <p className="text-muted-foreground text-sm">{feature.description}</p>
           </InteractiveCard>
         ))}

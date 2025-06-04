@@ -9,6 +9,7 @@ import { Loader2, Copy, CheckCircle } from 'lucide-react';
 import SectionWrapper from '@/components/shared/section-wrapper';
 import SectionTitle from '@/components/shared/section-title';
 import { automationRecommendation, AutomationRecommendationInput } from '@/ai/flows/automation-recommendation';
+import TypingEffect from '@/components/client/typing-effect';
 import { cn } from '@/lib/utils';
 
 // Basic Markdown to HTML parser
@@ -80,7 +81,7 @@ export default function AiRecommendationSection() {
   return (
     <SectionWrapper id="recomendacion-ia" className="bg-card">
       <SectionTitle>
-        Obtén tu Recomendación de Automatización <span role="img" aria-label="sparks">✨</span>
+        <TypingEffect texts={['Obtén tu Recomendación de Automatización']} className="inline" /> <span role="img" aria-label="sparks" className="inline-block ml-1">✨</span>
       </SectionTitle>
       <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-8">
         Describe tu proceso de negocio o el desafío que enfrentas, y nuestra IA te proporcionará una recomendación de automatización personalizada utilizando nuestros servicios.
