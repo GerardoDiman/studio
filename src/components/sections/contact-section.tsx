@@ -35,13 +35,33 @@ export default function ContactSection() {
       return;
     }
     // Here you would typically send the form data to a backend API
-    console.log('Form submitted:', formData);
-    toast({
-      title: "Mensaje Enviado",
-      description: "Gracias por contactarnos. Nos pondremos en contacto contigo pronto.",
-      variant: "success",
-    });
-    setFormData({ name: '', email: '', message: '' }); // Reset form
+    try {
+      const response = await fetch('https://logrequestbody-pll7t5xgra-uc.a.run.app', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Mensaje Enviado",
+          description: "Gracias por contactarnos. Nos pondremos en contacto contigo pronto.",
+          variant: "success",
+        });
+        setFormData({ name: '', email: '', message: '' }); // Reset form
+      } else {
+        throw new Error(`Error: ${response.status}`);
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast({
+        title: "Error al enviar mensaje",
+        description: "Hubo un problema al enviar tu mensaje. Por favor, inténtalo de nuevo más tarde.",
+        variant: "destructive",
+      });
+    }
   };
 
   const contactInfo = [
