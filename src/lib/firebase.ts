@@ -23,7 +23,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+
+// Conditionally initialize Analytics only on the client side
+const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
 
 // Inicializa Cloud Firestore y obtén una instancia
 const db = getFirestore(app);
