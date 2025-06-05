@@ -1,27 +1,32 @@
 // src/lib/firebase.ts
 
-import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
-// Importa otros servicios de Firebase que necesites (ej: getAuth, getStorage)
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// Importa la función para inicializar Firestore
+import { getFirestore } from "firebase/firestore";
 
-// Tu configuración de Firebase (reemplaza con la que copiaste de la consola)
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your Web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyA3xg4vx8ieaA-LDjafWf1NYmRgNgBCjWc",
+  apiKey: "AIzaSyA3xg4vx8ieaA-LDjafWf1NYmRgNBcjWC",
   authDomain: "dimans-intelligent-systems.firebaseapp.com",
   projectId: "dimans-intelligent-systems",
-  storageBucket: "dimans-intelligent-systems.firebasestorage.app",
+  storageBucket: "dimans-intelligent-systems.appspot.com",
   messagingSenderId: "704295478801",
   appId: "1:704295478801:web:4bd287a9b20a68db3073b0",
   measurementId: "G-7MGXW534KN"
 };
 
-// Inicializa Firebase
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
-// Obtén una instancia de Firestore (si lo vas a usar)
+// Inicializa Cloud Firestore y obtén una instancia
 const db = getFirestore(app);
 
-// Exporta las instancias de los servicios que necesites usar en otras partes de tu aplicación
-export { db };
-// export { auth } // Si usas Authentication
-// export { storage } // Si usas Storage
+// Exporta las instancias de los servicios que necesites usar
+export { app, analytics, db };
