@@ -25,7 +25,6 @@ export default function ContactSection() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Basic validation
     if (!formData.name || !formData.email || !formData.message) {
       toast({
         title: "Campos incompletos",
@@ -34,9 +33,9 @@ export default function ContactSection() {
       });
       return;
     }
-    // Here you would typically send the form data to a backend API
+    
     try {
-      const response = await fetch('https://logrequestbody-pll7t5xgra-uc.a.run.app', {
+      const response = await fetch('/api/contact', { // Changed URL to internal API route
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,15 +49,16 @@ export default function ContactSection() {
           description: "Gracias por contactarnos. Nos pondremos en contacto contigo pronto.",
           variant: "success",
         });
-        setFormData({ name: '', email: '', message: '' }); // Reset form
+        setFormData({ name: '', email: '', message: '' }); 
       } else {
-        throw new Error(`Error: ${response.status}`);
+        const errorData = await response.json().catch(() => ({ message: 'Error desconocido del servidor' }));
+        throw new Error(errorData.message || `Error: ${response.status}`);
       }
     } catch (error) {
       console.error('Error submitting form:', error);
       toast({
         title: "Error al enviar mensaje",
-        description: "Hubo un problema al enviar tu mensaje. Por favor, inténtalo de nuevo más tarde.",
+        description: (error instanceof Error && error.message) ? error.message : "Hubo un problema al enviar tu mensaje. Por favor, inténtalo de nuevo más tarde.",
         variant: "destructive",
       });
     }
