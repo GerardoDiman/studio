@@ -10,6 +10,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { MapPin, Phone, Mail, Clock, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase'; // Ajusta la ruta si tu archivo de firebase está en otro lugar
+
 
 export default function ContactSection() {
   const { toast } = useToast();
@@ -35,25 +38,15 @@ export default function ContactSection() {
     }
     
     try {
-      const response = await fetch('/api/contact', { // Changed URL to internal API route
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      // Use addDoc to send data to Firestore
+      await addDoc(collection(db, "contactMessages"), formData); // "contactMessages" is the name of the collection
 
-      if (response.ok) {
-        toast({
-          title: "Mensaje Enviado",
-          description: "Gracias por contactarnos. Nos pondremos en contacto contigo pronto.",
-          variant: "success",
-        });
-        setFormData({ name: '', email: '', message: '' }); 
-      } else {
-        const errorData = await response.json().catch(() => ({ message: 'Error desconocido del servidor' }));
-        throw new Error(errorData.message || `Error: ${response.status}`);
-      }
+      toast({
+        title: "Mensaje Enviado",
+        description: "Gracias por contactarnos. Nos pondremos en contacto contigo pronto.",
+        variant: "success",
+      });
+      setFormData({ name: '', email: '', message: '' });
     } catch (error) {
       console.error('Error submitting form:', error);
       toast({
