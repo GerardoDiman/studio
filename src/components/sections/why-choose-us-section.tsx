@@ -44,7 +44,7 @@ export default function WhyChooseUsSection() {
             <div className="flex justify-center mb-6">
               <feature.icon className="h-16 w-16 text-primary" />
             </div>
-            <h3 className="text-xl font-bold text-foreground mb-3 h-14 flex items-center justify-center">
+            <h3 className="text-xl font-bold text-foreground mb-3 flex items-center justify-center">
               <TypingEffect texts={[feature.title]} className="text-xl font-bold text-foreground" />
             </h3>
             <p className="text-muted-foreground text-sm">{feature.description}</p>

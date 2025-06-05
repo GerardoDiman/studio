@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -45,34 +44,42 @@ export default function Header() {
         isScrolled ? 'shadow-lg' : 'shadow-sm'
       )}
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-20 items-center justify-between">
-          <Link href="/" className="text-3xl font-extrabold text-primary tracking-tight">
-            DIMAN AUTOMATIONS
-          </Link>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20 relative"> {/* Added relative for absolute positioning context */}
+        <Link href="/" className="text-xl md:text-2xl lg:text-3xl font-extrabold text-primary tracking-tight whitespace-nowrap">
+          DIMAN AUTOMATIONS
+        </Link>
 
-          <nav className="hidden lg:flex space-x-1">
-            {navItems.map((item) => (
-              <NavLink key={item.label} href={item.href} onClick={() => setIsMenuOpen(false)}>
-                {item.label}
-              </NavLink>
-            ))}
-          </nav>
+        {/* Navegación para escritorio (visible en pantallas grandes) */}
+        {/* This block is hidden to show hamburger in all sizes */}
+        <nav className="hidden space-x-6">
+          {navItems.map((item) => (
+            <NavLink key={item.label} href={item.href}>
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
 
-          <div className="lg:hidden">
-            <Button variant="ghost" size="icon" onClick={toggleMenu} aria-label="Toggle menu">
-              {isMenuOpen ? <X className="h-7 w-7 text-primary" /> : <Menu className="h-7 w-7 text-primary" />}
-            </Button>
-          </div>
+        {/* Adjusted positioning for the hamburger button */}
+
+          {/* Botón de hamburguesa (visible en pantallas pequeñas y medianas) */}
+        <div className="md:hidden">
+          <Button variant="ghost" size="icon" onClick={toggleMenu} aria-label="Toggle menu">
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </Button>
         </div>
       </div>
+      
+      {/* Button is now fixed, removed its container div */}
+      <Button variant="ghost" size="icon" onClick={toggleMenu} aria-label="Toggle menu" className="fixed top-4 right-4 z-50">
+        {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+      </Button>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu panel - visible when isMenuOpen is true in all sizes */}
       {isMenuOpen && (
-        <div className="lg:hidden absolute top-20 left-0 right-0 bg-background shadow-xl pb-4">
+        <div className="absolute top-20 left-0 right-0 bg-background shadow-xl pb-4 animate-in slide-in-from-top-8 duration-300 overflow-x-hidden">
           <nav className="flex flex-col items-center space-y-2 px-4">
             {navItems.map((item) => (
-               <NavLink key={item.label} href={item.href} onClick={toggleMenu} className="w-full text-center py-2">
+              <NavLink key={item.label} href={item.href} onClick={toggleMenu} className="w-full text-center py-2">
                 {item.label}
               </NavLink>
             ))}

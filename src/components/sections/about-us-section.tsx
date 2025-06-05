@@ -4,14 +4,14 @@
 import SectionWrapper from '@/components/shared/section-wrapper';
 import SectionTitle from '@/components/shared/section-title';
 import TypingEffect from '@/components/client/typing-effect';
-import LottiePlayer from '@/components/client/lottie-player';
+import Image from 'next/image';
 
 export default function AboutUsSection() {
   return (
     <SectionWrapper id="quienes-somos" className="bg-card">
       <SectionTitle>Quiénes Somos</SectionTitle>
       <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
-        <div className="space-y-6 text-muted-foreground">
+        <div className="space-y-6 text-muted-foreground order-last md:order-none">
           <h3 className="text-2xl font-semibold text-primary">
             <TypingEffect texts={['Nuestra Misión']} className="text-2xl font-semibold text-primary" />
           </h3>
@@ -35,13 +35,16 @@ export default function AboutUsSection() {
             <li><span className="font-medium text-foreground">Compromiso:</span> Estamos dedicados al éxito a largo plazo de nuestros clientes.</li>
           </ul>
         </div>
-        <div className="rounded-lg overflow-hidden shadow-xl flex items-center justify-center aspect-w-4 aspect-h-3 bg-card/50 p-4">
-          <LottiePlayer
-            path="https://assets3.lottiefiles.com/packages/lf20_V9t630.json" // Example Automation/Gears Lottie
-            className="w-full h-auto max-w-[350px] md:max-w-[400px]"
-            aria-label="Animación de engranajes girando, representando la automatización y los procesos."
+        <div className="rounded-lg overflow-hidden shadow-xl flex items-center justify-center aspect-w-4 aspect-h-3 bg-card/50 p-4 order-first md:order-none">
+          <Image
+            src="/imagenes/equipoDiman.jpg"
+            alt="Equipo Diman"
+            width={500} // Puedes ajustar el ancho y alto según sea necesario
+            height={300}
+            className="w-full h-auto object-cover rounded-lg" // Añadir clases para que la imagen se ajuste y cubra el espacio
           />
         </div>
+
       </div>
     </SectionWrapper>
   );

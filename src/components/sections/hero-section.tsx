@@ -24,14 +24,14 @@ export default function HeroSection() {
           For local videos, place them in the `public` folder. e.g., /videos/hero-background.mp4
           For external videos, use the full URL.
         */}
-        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+        <source src="/videos/Animate_all_lights.mp4" type="video/mp4" />
         {/* You can add more <source> elements for different video formats if needed */}
         Tu navegador no soporta el tag de video.
       </video>
       
       <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
       
-      <div className="relative z-10 text-center p-4 animate-slide-up-fade-in max-w-3xl">
+      <div className="relative z-10 text-center p-4 sm:px-6 lg:px-8 animate-slide-up-fade-in max-w-3xl mx-auto">
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6 text-center min-h-[9rem] sm:min-h-[11rem] md:min-h-[14rem] lg:min-h-[16rem] flex flex-col justify-center items-center">
           <span className="text-primary block">Impulsando la</span>
           <TypingEffect
@@ -50,9 +50,9 @@ export default function HeroSection() {
         <Button 
           asChild 
           size="lg" 
-          className="bg-primary text-primary-foreground hover:bg-primary/90 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl px-10 py-6 text-lg font-semibold rounded-lg"
-        >
-          <Link href="/contacto">Contáctanos Hoy</Link>
+          className="bg-primary text-primary-foreground hover:bg-primary/90 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl px-10 py-6 text-lg font-semibold rounded-lg hover:text-gray-500"
+        > 
+          <Link href="/#contacto">Contáctanos Hoy</Link>
         </Button>
       </div>
     </SectionWrapper>

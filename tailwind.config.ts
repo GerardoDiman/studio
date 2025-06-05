@@ -9,6 +9,14 @@ export default {
   ],
   theme: {
     extend: {
+      screens: {
+        'mobileS': '320px', // Small mobile
+        'mobileM': '375px', // Medium mobile
+        'mobileL': '425px', // Large mobile
+        'tablet': '768px', // Tablet (same as default md)
+        'laptop': '1024px', // Laptop (same as default lg)
+         // Keeping default breakpoints as well
+      },
       fontFamily: {
         body: ['Inter', 'sans-serif'],
         headline: ['Inter', 'sans-serif'], // Using Inter for headlines as well

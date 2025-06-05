@@ -37,6 +37,7 @@ export default function ScrollToTopButton() {
       size="icon"
       onClick={scrollToTop}
       className={cn(
+        'whitespace-normal',
         'fixed bottom-6 right-6 z-50 rounded-full p-2 shadow-lg transition-opacity duration-300 ease-in-out hover:scale-110',
         'bg-primary text-primary-foreground hover:bg-primary/90 border-primary/50',
         isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'

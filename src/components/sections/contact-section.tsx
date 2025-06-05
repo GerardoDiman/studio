@@ -45,17 +45,17 @@ export default function ContactSection() {
   };
 
   const contactInfo = [
-    { icon: MapPin, text: '123 Calle Ficticia, Ciudad Ejemplo, CP 00000' },
-    { icon: Phone, text: '+1 (555) 123-4567' },
-    { icon: Mail, text: 'contacto@dimanautomations.com' },
-    { icon: Clock, text: 'Lunes - Viernes: 9:00 AM - 6:00 PM' },
+    { icon: MapPin, text: 'San Pedro, Cholula, Puebla. 72760' },
+    { icon: Phone, text: '9631372589' },
+    { icon: Mail, text: 'gerardodiman@gmail.com' },
+    { icon: Clock, text: 'Lunes - Viernes: 9:00 AM - 5:00 PM' },
   ];
 
   const socialLinks = [
-    { icon: Facebook, href: '#', label: 'Facebook' },
-    { icon: Twitter, href: '#', label: 'Twitter' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
-    { icon: Instagram, href: '#', label: 'Instagram' },
+    { icon: Facebook, href: 'https://www.facebook.com/GerardoDiman', label: 'Facebook' },
+    { icon: Twitter, href: 'https://x.com/GerardoDiman', label: 'Twitter' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/in/gerardodiman/', label: 'LinkedIn' },
+    { icon: Instagram, href: 'https://www.instagram.com/gerarddaiz/', label: 'Instagram' },
   ];
 
   return (
