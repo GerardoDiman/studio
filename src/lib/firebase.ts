@@ -10,10 +10,10 @@ import { getFirestore, type Firestore } from "firebase/firestore";
 // Your Web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyA3xg4vx8ieaA-LDjafWf1NYmRgNgBCjWc", // ¡¡VERIFICA ESTE VALOR!!
+  apiKey: "AIzaSyA3xg4vx8ieaA-LDjafWf1NYmRgNgBCjWc", // ¡¡VERIFICA ESTE VALOR!! Compara cuidadosamente con tu consola de Firebase. Si este valor no es el correcto y válido para tu proyecto, Firestore fallará.
   authDomain: "dimans-intelligent-systems.firebaseapp.com",
-  projectId: "dimans-intelligent-systems", // ¡¡VERIFICA ESTE VALOR!!
-  storageBucket: "dimans-intelligent-systems.appspot.com",
+  projectId: "dimans-intelligent-systems", // ¡¡VERIFICA ESTE VALOR!! Asegúrate que sea el ID de proyecto correcto.
+  storageBucket: "dimans-intelligent-systems.firebasestorage.app", // Corregido para coincidir con la consola
   messagingSenderId: "704295478801",
   appId: "1:704295478801:web:4bd287a9b20a68db3073b0",
   measurementId: "G-7MGXW534KN"
@@ -43,7 +43,7 @@ try {
   // Asignar un valor que indique fallo si es necesario, o lanzar el error.
   // Para este caso, si db no se inicializa, las operaciones fallarán y ya tenemos un console.error.
   // @ts-ignore: db might not be assigned if initializeApp fails, handle downstream.
-  db = null; 
+  db = null;
 }
 
 // Exporta las instancias de los servicios que necesites usar
