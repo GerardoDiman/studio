@@ -13,6 +13,14 @@ import { useToast } from '@/hooks/use-toast';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase'; // Ajusta la ruta si tu archivo de firebase está en otro lugar
 
+// Helper type guard for Firebase errors
+interface FirebaseError extends Error {
+  code?: string;
+}
+
+function hasFirebaseErrorCode(error: any): error is FirebaseError {
+  return typeof error === 'object' && error !== null && typeof (error as FirebaseError).code === 'string';
+}
 
 export default function ContactSection() {
   const { toast } = useToast();
@@ -36,29 +44,42 @@ export default function ContactSection() {
       });
       return;
     }
-  
+
     try {
-      // **Llamada directa a addDoc sin lógica de fetch anterior**
       await addDoc(collection(db, "contactMessages"), formData);
-  
+
       toast({
         title: "Mensaje Enviado",
         description: "Gracias por contactarnos. Nos pondremos en contacto contigo pronto.",
         variant: "success",
       });
-      // Limpiar el formulario si es necesario
       setFormData({ name: '', email: '', message: '' });
-  
+
     } catch (error) {
       console.error("Error al enviar el mensaje a Firestore:", error);
+      let userFriendlyMessage = "Hubo un problema al enviar tu mensaje. Inténtalo de nuevo.";
+
+      if (hasFirebaseErrorCode(error)) {
+        if (error.code === 'unavailable') {
+          userFriendlyMessage = "No se pudo conectar a Firestore. Verifica tu conexión a internet e inténtalo de nuevo.";
+        } else if (error.code === 'permission-denied') {
+          userFriendlyMessage = "Error de permisos. No se pudo guardar el mensaje. Esto podría deberse a las reglas de seguridad de Firestore. Consulta la consola para más detalles.";
+        } else {
+          // Intenta mostrar el mensaje de error de Firebase si está disponible y es útil
+          userFriendlyMessage = `Error de Firestore: ${error.message || error.code}. Consulta la consola para más detalles.`;
+        }
+      } else if (error instanceof Error) {
+        userFriendlyMessage = `Error: ${error.message}. Consulta la consola para más detalles.`;
+      }
+
       toast({
-        title: "Error al enviar mensaje",
-        description: (error instanceof Error && error.message) ? error.message : "Hubo un problema al enviar tu mensaje. Por favor, inténtalo de nuevo más tarde.",
+        title: "Error al Enviar Mensaje",
+        description: userFriendlyMessage,
         variant: "destructive",
       });
     }
   };
-  
+
 
   const contactInfo = [
     { icon: MapPin, text: 'San Pedro, Cholula, Puebla. 72760' },
@@ -84,45 +105,45 @@ export default function ContactSection() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-muted-foreground mb-1">Nombre Completo</label>
-              <Input 
-                type="text" 
-                name="name" 
-                id="name" 
+              <Input
+                type="text"
+                name="name"
+                id="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="Tu nombre completo" 
-                className="bg-input border-border focus:ring-primary focus:border-primary text-foreground placeholder:text-muted-foreground" 
-                required 
+                placeholder="Tu nombre completo"
+                className="bg-input border-border focus:ring-primary focus:border-primary text-foreground placeholder:text-muted-foreground"
+                required
               />
             </div>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-muted-foreground mb-1">Correo Electrónico</label>
-              <Input 
-                type="email" 
-                name="email" 
-                id="email" 
+              <Input
+                type="email"
+                name="email"
+                id="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="tu@email.com" 
-                className="bg-input border-border focus:ring-primary focus:border-primary text-foreground placeholder:text-muted-foreground" 
-                required 
+                placeholder="tu@email.com"
+                className="bg-input border-border focus:ring-primary focus:border-primary text-foreground placeholder:text-muted-foreground"
+                required
               />
             </div>
             <div>
               <label htmlFor="message" className="block text-sm font-medium text-muted-foreground mb-1">Tu Mensaje</label>
-              <Textarea 
-                name="message" 
-                id="message" 
-                rows={5} 
+              <Textarea
+                name="message"
+                id="message"
+                rows={5}
                 value={formData.message}
                 onChange={handleChange}
-                placeholder="Escribe tu consulta aquí..." 
-                className="bg-input border-border focus:ring-primary focus:border-primary text-foreground placeholder:text-muted-foreground" 
-                required 
+                placeholder="Escribe tu consulta aquí..."
+                className="bg-input border-border focus:ring-primary focus:border-primary text-foreground placeholder:text-muted-foreground"
+                required
               />
             </div>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transform hover:scale-105 transition-all duration-300 shadow-md py-3 text-base"
             >
               Enviar Mensaje
@@ -160,3 +181,5 @@ export default function ContactSection() {
     </SectionWrapper>
   );
 }
+
+    
