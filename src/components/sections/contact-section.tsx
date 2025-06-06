@@ -36,19 +36,21 @@ export default function ContactSection() {
       });
       return;
     }
-    
+  
     try {
-      // Use addDoc to send data to Firestore
-      await addDoc(collection(db, "contactMessages"), formData); // "contactMessages" is the name of the collection
-
+      // **Llamada directa a addDoc sin lógica de fetch anterior**
+      await addDoc(collection(db, "contactMessages"), formData);
+  
       toast({
         title: "Mensaje Enviado",
         description: "Gracias por contactarnos. Nos pondremos en contacto contigo pronto.",
         variant: "success",
       });
+      // Limpiar el formulario si es necesario
       setFormData({ name: '', email: '', message: '' });
+  
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error("Error al enviar el mensaje a Firestore:", error);
       toast({
         title: "Error al enviar mensaje",
         description: (error instanceof Error && error.message) ? error.message : "Hubo un problema al enviar tu mensaje. Por favor, inténtalo de nuevo más tarde.",
@@ -56,6 +58,7 @@ export default function ContactSection() {
       });
     }
   };
+  
 
   const contactInfo = [
     { icon: MapPin, text: 'San Pedro, Cholula, Puebla. 72760' },
