@@ -11,7 +11,7 @@ import { MapPin, Phone, Mail, Clock, Facebook, Twitter, Linkedin, Instagram } fr
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { collection, addDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase'; // Ajusta la ruta si tu archivo de firebase está en otro lugar
+import { db } from '@/lib/firebase'; 
 
 // Helper type guard for Firebase errors
 interface FirebaseError extends Error {
@@ -56,20 +56,24 @@ export default function ContactSection() {
       setFormData({ name: '', email: '', message: '' });
 
     } catch (error) {
-      console.error("Error al enviar el mensaje a Firestore:", error);
-      let userFriendlyMessage = "Hubo un problema al enviar tu mensaje. Inténtalo de nuevo.";
+      console.error("Error completo al enviar el mensaje a Firestore:", error); 
+      let userFriendlyMessage = "Hubo un problema al enviar tu mensaje. Inténtalo de nuevo más tarde.";
 
       if (hasFirebaseErrorCode(error)) {
         if (error.code === 'unavailable') {
           userFriendlyMessage = "No se pudo conectar a Firestore. Verifica tu conexión a internet e inténtalo de nuevo.";
         } else if (error.code === 'permission-denied') {
-          userFriendlyMessage = "Error de permisos. No se pudo guardar el mensaje. Esto podría deberse a las reglas de seguridad de Firestore. Consulta la consola para más detalles.";
+          userFriendlyMessage = "Error de permisos. No se pudo guardar el mensaje. Esto podría deberse a las reglas de seguridad de Firestore. Revisa la consola para más detalles.";
         } else {
-          // Intenta mostrar el mensaje de error de Firebase si está disponible y es útil
-          userFriendlyMessage = `Error de Firestore: ${error.message || error.code}. Consulta la consola para más detalles.`;
+          // For other Firebase errors, include code and message if available
+          userFriendlyMessage = `Error de Firestore (${error.code}): ${error.message || 'No hay mensaje adicional.'}. Revisa la consola para más detalles.`;
         }
       } else if (error instanceof Error) {
-        userFriendlyMessage = `Error: ${error.message}. Consulta la consola para más detalles.`;
+        // Generic error
+        userFriendlyMessage = `Error: ${error.message}. Revisa la consola para más detalles.`;
+      } else {
+        // Unknown error type
+        userFriendlyMessage = "Ocurrió un error desconocido. Revisa la consola para más detalles."
       }
 
       toast({
@@ -181,5 +185,3 @@ export default function ContactSection() {
     </SectionWrapper>
   );
 }
-
-    
