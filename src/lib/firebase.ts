@@ -1,10 +1,8 @@
-// src/lib/firebase.ts
 
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// Importa la función para inicializar Firestore
-import { getFirestore } from "firebase/firestore";
+// src/lib/firebase.ts
+import { initializeApp, type FirebaseApp } from "firebase/app";
+import { getAnalytics, type Analytics } from "firebase/analytics";
+import { getFirestore, type Firestore } from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -12,23 +10,41 @@ import { getFirestore } from "firebase/firestore";
 // Your Web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyA3xg4vx8ieaA-LDjafWf1NYmRgNgBCjWc",
+  apiKey: "AIzaSyA3xg4vx8ieaA-LDjafWf1NYmRgNgBCjWc", // ¡¡VERIFICA ESTE VALOR!!
   authDomain: "dimans-intelligent-systems.firebaseapp.com",
-  projectId: "dimans-intelligent-systems",
+  projectId: "dimans-intelligent-systems", // ¡¡VERIFICA ESTE VALOR!!
   storageBucket: "dimans-intelligent-systems.appspot.com",
   messagingSenderId: "704295478801",
   appId: "1:704295478801:web:4bd287a9b20a68db3073b0",
   measurementId: "G-7MGXW534KN"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+// Imprime la configuración en la consola para depuración.
+// Compara estos valores cuidadosamente con los de tu consola de Firebase.
+console.log("Firebase Config being used by the app:", JSON.stringify(firebaseConfig, null, 2));
 
-// Conditionally initialize Analytics only on the client side
-const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
+let app: FirebaseApp;
+let analytics: Analytics | null = null;
+let db: Firestore;
 
-// Inicializa Cloud Firestore y obtén una instancia
-const db = getFirestore(app);
+try {
+  app = initializeApp(firebaseConfig);
+  console.log("Firebase App initialized:", app.name);
+
+  if (typeof window !== 'undefined') {
+    analytics = getAnalytics(app);
+    console.log("Firebase Analytics initialized.");
+  }
+
+  db = getFirestore(app);
+  console.log("Firebase Firestore instance initialized. Project ID from Firestore instance:", db.app.options.projectId);
+} catch (error) {
+  console.error("CRITICAL: Error initializing Firebase. Firestore will not work.", error);
+  // Asignar un valor que indique fallo si es necesario, o lanzar el error.
+  // Para este caso, si db no se inicializa, las operaciones fallarán y ya tenemos un console.error.
+  // @ts-ignore: db might not be assigned if initializeApp fails, handle downstream.
+  db = null; 
+}
 
 // Exporta las instancias de los servicios que necesites usar
 export { app, analytics, db };
