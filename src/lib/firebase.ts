@@ -12,7 +12,7 @@ import { getFirestore } from "firebase/firestore";
 // Your Web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyA3xg4vx8ieaA-LDjafWf1NYmRgNBcjWC",
+  apiKey: "AIzaSyA3xg4vx8ieaA-LDjafWf1NYmRgNgBCjWc",
   authDomain: "dimans-intelligent-systems.firebaseapp.com",
   projectId: "dimans-intelligent-systems",
   storageBucket: "dimans-intelligent-systems.appspot.com",
