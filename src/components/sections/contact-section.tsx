@@ -66,11 +66,16 @@ export default function ContactSection() {
         });
       }
     } catch (networkError: any) {
-      const errorMessage = networkError.message || 'Error desconocido';
-      console.error("Error de red o conexión al enviar datos a n8n:", networkError);
+      console.error("Detailed Fetch Error:", networkError);
+      let userMessage = `No se pudo conectar con el servidor (${networkError.message || 'Error desconocido'}).`;
+      if (networkError.name === 'TypeError' && networkError.message === 'Failed to fetch') {
+        userMessage += " Esto suele ser un problema de CORS o de red. Por favor, verifica la configuración CORS de tu webhook n8n y tu conexión a internet. Revisa la pestaña 'Network' en las herramientas de desarrollador de tu navegador para más detalles (busca solicitudes fallidas en rojo).";
+      } else {
+        userMessage += " Verifica tu conexión a internet o la configuración CORS del webhook.";
+      }
       toast({
-        title: "Error de Red",
-        description: `No se pudo conectar con el servidor (${errorMessage}). Verifica tu conexión a internet o la configuración CORS del webhook.`,
+        title: "Error de Red/CORS",
+        description: userMessage,
         variant: "destructive",
       });
     }
@@ -182,3 +187,4 @@ export default function ContactSection() {
     </SectionWrapper>
   );
 }
+
