@@ -1341,7 +1341,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2
 // Your Web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyA3xg4vx8ieaA-LDjafWf1NYmRgNgBCjWc",
+    apiKey: "AIzaSyBAx83Wba-5klPJ3LVdy5jOD8cjIhgHPIQ",
     authDomain: "dimans-intelligent-systems.firebaseapp.com",
     projectId: "dimans-intelligent-systems",
     storageBucket: "dimans-intelligent-systems.firebasestorage.app",
