@@ -10,9 +10,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { MapPin, Phone, Mail, Clock, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
-// No longer importing Firestore related items:
-// import { collection, addDoc } from 'firebase/firestore';
-// import { db } from '@/lib/firebase'; 
+import { collection, addDoc, Timestamp } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 export default function ContactSection() {
   const { toast } = useToast();
@@ -40,49 +39,93 @@ export default function ContactSection() {
 
     setIsSubmitting(true);
 
-    try {
-      // Enviar datos al webhook de n8n
-      const webhookUrl = 'http://localhost:5678/webhook-test/30f766e6-dbbe-4b6d-9b9e-9b2e1fe33fa9'; 
+    const dataForFirebase = {
+      ...formData,
+      createdAt: Timestamp.now(),
+    };
 
-      const response = await fetch(webhookUrl, {
+    const dataForN8n = { ...formData };
+
+    let n8nSuccessful = false;
+    let firestoreSuccessful = false;
+
+    try {
+      // Attempt to send to n8n webhook
+      const webhookUrl = 'http://localhost:5678/webhook-test/30f766e6-dbbe-4b6d-9b9e-9b2e1fe33fa9';
+      const n8nResponse = await fetch(webhookUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dataForN8n),
       });
 
-      if (response.ok) {
-        toast({
-          title: "Mensaje Enviado",
-          description: "Gracias por contactarnos. Tu mensaje ha sido recibido.",
-          variant: "success",
-        });
-        setFormData({ name: '', email: '', message: '' }); // Limpiar el formulario
+      if (n8nResponse.ok) {
         console.log("Datos enviados exitosamente a n8n");
+        n8nSuccessful = true;
       } else {
-        console.error("Error al enviar datos a n8n:", response.status, response.statusText);
-        const responseBody = await response.text(); // Intenta leer el cuerpo de la respuesta para más detalles
+        console.error("Error al enviar datos a n8n:", n8nResponse.status, n8nResponse.statusText);
+        const responseBody = await n8nResponse.text();
         toast({
-          title: "Error al Enviar Mensaje a n8n",
-          description: `Hubo un problema al conectar con el servicio (n8n). Código: ${response.status}. ${responseBody || ''}`,
+          title: "Error al Enviar a n8n",
+          description: `Hubo un problema con el servicio de notificación (n8n). Código: ${n8nResponse.status}. ${responseBody || ''}`,
           variant: "destructive",
         });
       }
-    } catch (error) {
-      console.error("Error de red o conexión al enviar datos a n8n:", error);
-      let userFriendlyMessage = "Hubo un problema de red o conexión al enviar tu mensaje. Inténtalo de nuevo más tarde.";
-      if (error instanceof Error) {
-          userFriendlyMessage = `Error de red: ${error.message}. Revisa tu conexión.`;
-      }
+    } catch (networkError: any) {
+      console.error("Error de red o conexión al enviar datos a n8n:", networkError);
       toast({
-        title: "Error de Conexión",
-        description: userFriendlyMessage,
+        title: "Error de Conexión (n8n)",
+        description: `Hubo un problema de red al enviar tu mensaje a n8n. ${networkError.message || ''}`,
         variant: "destructive",
       });
-    } finally {
-      setIsSubmitting(false);
     }
+
+    // Attempt to save to Firestore
+    try {
+      await addDoc(collection(db, "contactMessages"), dataForFirebase);
+      console.log("Datos guardados exitosamente en Firestore");
+      firestoreSuccessful = true;
+    } catch (firestoreError: any) {
+      console.error("Error al guardar en Firestore:", firestoreError);
+      let firestoreErrorMessage = "Hubo un problema al guardar tu mensaje en nuestra base de datos.";
+      if (firestoreError.code === 'permission-denied') {
+        firestoreErrorMessage = "Error de permisos al guardar en Firestore. Contacta al administrador.";
+      } else if (firestoreError.message) {
+        firestoreErrorMessage = `Error Firestore: ${firestoreError.message}`;
+      }
+      toast({
+        title: "Error Guardando Mensaje",
+        description: firestoreErrorMessage,
+        variant: "destructive",
+      });
+    }
+
+    // Final user feedback based on success of operations
+    if (firestoreSuccessful) { // Primary success indicator is Firestore save
+      toast({
+          title: "Mensaje Enviado",
+          description: "Gracias por contactarnos. Tu mensaje ha sido recibido y guardado.",
+          variant: "success",
+      });
+      setFormData({ name: '', email: '', message: '' }); // Clear form on success
+      if (!n8nSuccessful) {
+          toast({ // Additional toast if n8n failed but Firestore succeeded
+              title: "Aviso de Notificación",
+              description: "Tu mensaje fue guardado, pero hubo un problema con el sistema de notificación externo.",
+              variant: "default",
+          });
+      }
+    } else if (n8nSuccessful && !firestoreSuccessful) {
+        // n8n worked but Firestore failed
+        toast({
+          title: "Mensaje Enviado (Parcial)",
+          description: "Tu mensaje fue enviado a nuestro sistema de notificación, pero no se pudo guardar en la base de datos principal.",
+          variant: "default",
+        });
+        // Optionally clear form or not, depending on desired UX
+    }
+    // If both failed, individual error toasts would have already appeared.
+
+    setIsSubmitting(false);
   };
 
   const contactInfo = [
