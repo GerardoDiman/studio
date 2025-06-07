@@ -9,7 +9,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { MapPin, Phone, Mail, Clock, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
-// Firebase Firestore related imports are removed as per user request
 
 export default function ContactSection() {
   const { toast } = useToast();
@@ -40,7 +39,7 @@ export default function ContactSection() {
     const dataForN8n = { ...formData };
 
     try {
-      const webhookUrl = 'http://localhost:5678/webhook-test/30f766e6-dbbe-4b6d-9b9e-9b2e1fe33fa9';
+      const webhookUrl = 'https://n8n.srv858616.hstgr.cloud/webhook/30f766e6-dbbe-4b6d-9b9e-9b2e1fe33fa9';
       const n8nResponse = await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -51,7 +50,7 @@ export default function ContactSection() {
         console.log("Datos enviados exitosamente a n8n");
         toast({
           title: "Mensaje Enviado",
-          description: "Gracias por contactarnos. Tu mensaje ha sido enviado a nuestro sistema de notificación.",
+          description: "Gracias por contactarnos. Tu mensaje ha sido enviado.",
           variant: "success",
         });
         setFormData({ name: '', email: '', message: '' });
@@ -60,17 +59,17 @@ export default function ContactSection() {
         const n8nErrorDetails = `Error n8n: ${n8nResponse.status}. ${responseBody || n8nResponse.statusText}`;
         console.error("Error al enviar datos a n8n:", n8nErrorDetails);
         toast({
-          title: "Error en Notificación",
-          description: `Hubo un problema con el sistema de notificación externo. ${n8nErrorDetails}`,
+          title: "Error en Envío",
+          description: `Hubo un problema al enviar tu mensaje. ${n8nErrorDetails}`,
           variant: "destructive",
         });
       }
     } catch (networkError: any) {
-      const n8nErrorDetails = `Error de red n8n: ${networkError.message || 'Desconocido'}`;
+      const n8nErrorDetails = `Error de red: ${networkError.message || 'Desconocido'}`;
       console.error("Error de red o conexión al enviar datos a n8n:", networkError);
       toast({
         title: "Error de Red",
-        description: `No se pudo conectar con el sistema de notificación. ${n8nErrorDetails}`,
+        description: `No se pudo conectar con el servidor. ${n8nErrorDetails}`,
         variant: "destructive",
       });
     }
