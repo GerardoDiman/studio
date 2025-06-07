@@ -1,5 +1,17 @@
 {
-  "node": {},
+  "node": {
+    "4098e57e6a848ee4745ef8d44ab99ecd37a9096080": {
+      "workers": {
+        "app/recomendacion-ia/page": {
+          "moduleId": "[project]/.next-internal/server/app/recomendacion-ia/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/ai/flows/automation-recommendation.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/recomendacion-ia/page": "action-browser"
+      }
+    }
+  },
   "edge": {},
   "encryptionKey": "rgqggxNd9nbOEJvIcDkMsCYx9MQmczlxzkAuOw9+sOI="
 }

@@ -10,17 +10,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { MapPin, Phone, Mail, Clock, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase'; 
-
-// Helper type guard for Firebase errors
-interface FirebaseError extends Error {
-  code?: string;
-}
-
-function hasFirebaseErrorCode(error: any): error is FirebaseError {
-  return typeof error === 'object' && error !== null && typeof (error as FirebaseError).code === 'string';
-}
+// No longer importing Firestore related items:
+// import { collection, addDoc } from 'firebase/firestore';
+// import { db } from '@/lib/firebase'; 
 
 export default function ContactSection() {
   const { toast } = useToast();
@@ -29,93 +21,69 @@ export default function ContactSection() {
     email: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-// ... imports y código existente ...
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.message) {
+      toast({
+        title: "Campos incompletos",
+        description: "Por favor, rellena todos los campos del formulario.",
+        variant: "destructive",
+      });
+      return;
+    }
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  if (!formData.name || !formData.email || !formData.message) {
-    toast({
-      title: "Campos incompletos",
-      description: "Por favor, rellena todos los campos del formulario.",
-      variant: "destructive",
-    });
-    return;
-  }
-
-  try {
-    // 1. Guardar en Firestore
-    await addDoc(collection(db, "contactMessages"), formData);
-
-    toast({
-      title: "Mensaje Enviado",
-      description: "Gracias por contactarnos. Nos pondremos en contacto contigo pronto.",
-      variant: "success",
-    });
-    
-    // 2. Enviar datos al webhook de n8n
-    const webhookUrl = 'http://localhost:5678/webhook-test/30f766e6-dbbe-4b6d-9b9e-9b2e1fe33fa9'; // ¡Tu URL del webhook!
+    setIsSubmitting(true);
 
     try {
+      // Enviar datos al webhook de n8n
+      const webhookUrl = 'http://localhost:5678/webhook-test/30f766e6-dbbe-4b6d-9b9e-9b2e1fe33fa9'; 
+
       const response = await fetch(webhookUrl, {
-        method: 'POST', // O 'GET', dependiendo de cómo configuraste el webhook en n8n
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // Puede que necesites otros headers si configuraste autenticación en el webhook
         },
-        body: JSON.stringify(formData), // Envía los datos del formulario en formato JSON
+        body: JSON.stringify(formData),
       });
 
       if (response.ok) {
+        toast({
+          title: "Mensaje Enviado",
+          description: "Gracias por contactarnos. Tu mensaje ha sido recibido.",
+          variant: "success",
+        });
+        setFormData({ name: '', email: '', message: '' }); // Limpiar el formulario
         console.log("Datos enviados exitosamente a n8n");
       } else {
         console.error("Error al enviar datos a n8n:", response.status, response.statusText);
-        // Puedes querer manejar errores de respuesta de n8n aquí, quizás loggearlos o notificar de alguna forma
+        const responseBody = await response.text(); // Intenta leer el cuerpo de la respuesta para más detalles
+        toast({
+          title: "Error al Enviar Mensaje a n8n",
+          description: `Hubo un problema al conectar con el servicio (n8n). Código: ${response.status}. ${responseBody || ''}`,
+          variant: "destructive",
+        });
       }
     } catch (error) {
-      console.error("Error al conectar con el webhook de n8n:", error);
-      // Manejar errores de red o conexión para la llamada al webhook
-      // Nota: Un error aquí no debería impedir que el mensaje se guarde en Firestore,
-      // ya que la llamada a Firestore es 'await' antes de esta parte.
-    }
-
-    // Limpiar el formulario después de enviar (si ambas operaciones, Firestore y n8n, fueron intentadas)
-    setFormData({ name: '', email: '', message: '' });
-
-  } catch (error) {
-    console.error("Error completo al enviar el mensaje a Firestore:", error);
-    // ... tu lógica existente para manejar errores de Firestore ...
-    let userFriendlyMessage = "Hubo un problema al enviar tu mensaje. Inténtalo de nuevo más tarde.";
-
-    if (hasFirebaseErrorCode(error)) {
-      if (error.code === 'unavailable') {
-        userFriendlyMessage = "No se pudo conectar a Firestore. Verifica tu conexión a internet e inténtalo de nuevo.";
-      } else if (error.code === 'permission-denied') {
-        userFriendlyMessage = "Error de permisos. No se pudo guardar el mensaje. Esto podría deberse a las reglas de seguridad de Firestore. Revisa la consola para más detalles.";
-      } else {
-        userFriendlyMessage = `Error de Firestore (${error.code}): ${error.message || 'No hay mensaje adicional.'}. Revisa la consola para más detalles.`;
+      console.error("Error de red o conexión al enviar datos a n8n:", error);
+      let userFriendlyMessage = "Hubo un problema de red o conexión al enviar tu mensaje. Inténtalo de nuevo más tarde.";
+      if (error instanceof Error) {
+          userFriendlyMessage = `Error de red: ${error.message}. Revisa tu conexión.`;
       }
-    } else if (error instanceof Error) {
-      userFriendlyMessage = `Error: ${error.message}. Revisa la consola para más detalles.`;
-    } else {
-      userFriendlyMessage = "Ocurrió un error desconocido. Revisa la consola para más detalles."
+      toast({
+        title: "Error de Conexión",
+        description: userFriendlyMessage,
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
-
-    toast({
-      title: "Error al Enviar Mensaje",
-      description: userFriendlyMessage,
-      variant: "destructive",
-    });
-     // No limpiar el formulario si hubo un error en Firestore, para que el usuario pueda corregir
-  }
-};
-
-// ... resto del componente ...
-
+  };
 
   const contactInfo = [
     { icon: MapPin, text: 'San Pedro, Cholula, Puebla. 72760' },
@@ -150,6 +118,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 placeholder="Tu nombre completo"
                 className="bg-input border-border focus:ring-primary focus:border-primary text-foreground placeholder:text-muted-foreground"
                 required
+                disabled={isSubmitting}
               />
             </div>
             <div>
@@ -163,6 +132,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 placeholder="tu@email.com"
                 className="bg-input border-border focus:ring-primary focus:border-primary text-foreground placeholder:text-muted-foreground"
                 required
+                disabled={isSubmitting}
               />
             </div>
             <div>
@@ -176,13 +146,15 @@ const handleSubmit = async (e: React.FormEvent) => {
                 placeholder="Escribe tu consulta aquí..."
                 className="bg-input border-border focus:ring-primary focus:border-primary text-foreground placeholder:text-muted-foreground"
                 required
+                disabled={isSubmitting}
               />
             </div>
             <Button
               type="submit"
               className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transform hover:scale-105 transition-all duration-300 shadow-md py-3 text-base"
+              disabled={isSubmitting}
             >
-              Enviar Mensaje
+              {isSubmitting ? 'Enviando...' : 'Enviar Mensaje'}
             </Button>
           </form>
         </div>
