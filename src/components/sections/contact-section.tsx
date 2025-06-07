@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -47,7 +48,7 @@ export default function ContactSection() {
       });
 
       if (n8nResponse.ok) {
-        console.log("Datos enviados exitosamente a n8n");
+        console.log("Datos enviados exitosamente a n8n webhook.");
         toast({
           title: "Mensaje Enviado",
           description: "Gracias por contactarnos. Tu mensaje ha sido enviado.",
@@ -56,7 +57,7 @@ export default function ContactSection() {
         setFormData({ name: '', email: '', message: '' });
       } else {
         const responseBody = await n8nResponse.text();
-        const n8nErrorDetails = `Error n8n: ${n8nResponse.status}. ${responseBody || n8nResponse.statusText}`;
+        const n8nErrorDetails = `Error del servidor n8n: ${n8nResponse.status}. ${responseBody || n8nResponse.statusText}`;
         console.error("Error al enviar datos a n8n:", n8nErrorDetails);
         toast({
           title: "Error en Envío",
@@ -65,11 +66,11 @@ export default function ContactSection() {
         });
       }
     } catch (networkError: any) {
-      const n8nErrorDetails = `Error de red: ${networkError.message || 'Desconocido'}`;
+      const errorMessage = networkError.message || 'Error desconocido';
       console.error("Error de red o conexión al enviar datos a n8n:", networkError);
       toast({
         title: "Error de Red",
-        description: `No se pudo conectar con el servidor. ${n8nErrorDetails}`,
+        description: `No se pudo conectar con el servidor (${errorMessage}). Verifica tu conexión a internet o la configuración CORS del webhook.`,
         variant: "destructive",
       });
     }
