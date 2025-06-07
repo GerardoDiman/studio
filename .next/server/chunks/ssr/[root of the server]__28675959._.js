@@ -1299,7 +1299,6 @@ module.exports = mod;
 
 var { g: global, __dirname } = __turbopack_context__;
 {
-// src/lib/firebase.ts
 __turbopack_context__.s({
     "analytics": (()=>analytics),
     "app": (()=>app),
@@ -1313,39 +1312,49 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2
 ;
 ;
 ;
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-// Your Web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Your web app's Firebase configuration using environment variables
 const firebaseConfig = {
-    apiKey: "AIzaSyBAx83Wba-5klPJ3LVdy5jOD8cjIhgHPIQ",
-    authDomain: "dimans-intelligent-systems.firebaseapp.com",
-    projectId: "dimans-intelligent-systems",
-    storageBucket: "dimans-intelligent-systems.firebasestorage.app",
-    messagingSenderId: "704295478801",
-    appId: "1:704295478801:web:4bd287a9b20a68db3073b0",
-    measurementId: "G-7MGXW534KN"
+    apiKey: ("TURBOPACK compile-time value", "AIzaSyA3xg4vx8ieaA-LDjafWf1NYmRgNgBCjWc"),
+    authDomain: ("TURBOPACK compile-time value", "dimans-intelligent-systems.firebaseapp.com"),
+    projectId: ("TURBOPACK compile-time value", "dimans-intelligent-systems"),
+    storageBucket: ("TURBOPACK compile-time value", "dimans-intelligent-systems.firebasestorage.app"),
+    messagingSenderId: ("TURBOPACK compile-time value", "704295478801"),
+    appId: ("TURBOPACK compile-time value", "1:704295478801:web:4bd287a9b20a68db3073b0"),
+    measurementId: ("TURBOPACK compile-time value", "G-7MGXW534KN")
 };
-// Imprime la configuración en la consola para depuración.
-// Compara estos valores cuidadosamente con los de tu consola de Firebase.
-console.log("Firebase Config being used by the app:", JSON.stringify(firebaseConfig, null, 2));
+// Log the configuration to ensure environment variables are loaded (optional, remove for production)
+console.log("Firebase Config being used by the app (from env vars):", {
+    apiKey: firebaseConfig.apiKey ? "Loaded" : "NOT LOADED",
+    authDomain: firebaseConfig.authDomain ? "Loaded" : "NOT LOADED",
+    projectId: firebaseConfig.projectId ? "Loaded" : "NOT LOADED",
+    storageBucket: firebaseConfig.storageBucket ? "Loaded" : "NOT LOADED",
+    messagingSenderId: firebaseConfig.messagingSenderId ? "Loaded" : "NOT LOADED",
+    appId: firebaseConfig.appId ? "Loaded" : "NOT LOADED",
+    measurementId: firebaseConfig.measurementId ? "Loaded" : "NOT LOADED"
+});
 let app;
 let analytics = null;
 let db;
-try {
-    app = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$app$2f$dist$2f$esm$2f$index$2e$esm2017$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["initializeApp"])(firebaseConfig);
-    console.log("Firebase App initialized:", app.name);
-    if ("TURBOPACK compile-time falsy", 0) {
-        "TURBOPACK unreachable";
+// Check if all necessary Firebase config values are present
+const allConfigValuesPresent = Object.values(firebaseConfig).every((value)=>!!value);
+if (!allConfigValuesPresent) {
+    console.error("CRITICAL: Firebase configuration is missing. Check your environment variables.");
+    // @ts-ignore
+    db = null; // Ensure db is null if config is incomplete
+} else {
+    try {
+        app = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$app$2f$dist$2f$esm$2f$index$2e$esm2017$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["initializeApp"])(firebaseConfig); // Cast as any if some values might be undefined initially and you handle it
+        console.log("Firebase App initialized:", app.name);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
+        }
+        db = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getFirestore"])(app);
+        console.log("Firebase Firestore instance initialized. Project ID from Firestore instance:", db.app.options.projectId);
+    } catch (error) {
+        console.error("CRITICAL: Error initializing Firebase. Firestore will not work.", error);
+        // @ts-ignore
+        db = null;
     }
-    db = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getFirestore"])(app);
-    console.log("Firebase Firestore instance initialized. Project ID from Firestore instance:", db.app.options.projectId);
-} catch (error) {
-    console.error("CRITICAL: Error initializing Firebase. Firestore will not work.", error);
-    // Asignar un valor que indique fallo si es necesario, o lanzar el error.
-    // Para este caso, si db no se inicializa, las operaciones fallarán y ya tenemos un console.error.
-    // @ts-ignore: db might not be assigned if initializeApp fails, handle downstream.
-    db = null;
 }
 ;
 }}),
