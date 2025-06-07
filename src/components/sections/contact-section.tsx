@@ -9,8 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { MapPin, Phone, Mail, Clock, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
-import { collection, addDoc, Timestamp } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+// Firebase Firestore related imports are removed as per user request
 
 export default function ContactSection() {
   const { toast } = useToast();
@@ -38,19 +37,8 @@ export default function ContactSection() {
 
     setIsSubmitting(true);
 
-    const dataForFirebase = {
-      ...formData,
-      createdAt: Timestamp.now(),
-    };
-
     const dataForN8n = { ...formData };
 
-    let n8nSuccessful = false;
-    let firestoreSuccessful = false;
-    let n8nErrorDetails = '';
-    let firestoreErrorDetails = '';
-
-    // Attempt to send to n8n webhook
     try {
       const webhookUrl = 'http://localhost:5678/webhook-test/30f766e6-dbbe-4b6d-9b9e-9b2e1fe33fa9';
       const n8nResponse = await fetch(webhookUrl, {
@@ -61,58 +49,28 @@ export default function ContactSection() {
 
       if (n8nResponse.ok) {
         console.log("Datos enviados exitosamente a n8n");
-        n8nSuccessful = true;
+        toast({
+          title: "Mensaje Enviado",
+          description: "Gracias por contactarnos. Tu mensaje ha sido enviado a nuestro sistema de notificación.",
+          variant: "success",
+        });
+        setFormData({ name: '', email: '', message: '' });
       } else {
         const responseBody = await n8nResponse.text();
-        n8nErrorDetails = `Error n8n: ${n8nResponse.status}. ${responseBody || n8nResponse.statusText}`;
+        const n8nErrorDetails = `Error n8n: ${n8nResponse.status}. ${responseBody || n8nResponse.statusText}`;
         console.error("Error al enviar datos a n8n:", n8nErrorDetails);
+        toast({
+          title: "Error en Notificación",
+          description: `Hubo un problema con el sistema de notificación externo. ${n8nErrorDetails}`,
+          variant: "destructive",
+        });
       }
     } catch (networkError: any) {
-      n8nErrorDetails = `Error de red n8n: ${networkError.message || 'Desconocido'}`;
+      const n8nErrorDetails = `Error de red n8n: ${networkError.message || 'Desconocido'}`;
       console.error("Error de red o conexión al enviar datos a n8n:", networkError);
-    }
-
-    // Attempt to save to Firestore
-    if (db) { // Check if db is initialized
-      try {
-        await addDoc(collection(db, "contactMessages"), dataForFirebase);
-        console.log("Datos guardados exitosamente en Firestore");
-        firestoreSuccessful = true;
-      } catch (error: any) {
-        firestoreErrorDetails = `Error Firestore: ${error.code || error.message || 'Desconocido'}`;
-        console.error("Error al guardar en Firestore:", error);
-      }
-    } else {
-        firestoreErrorDetails = "La instancia de Firestore no está inicializada. No se puede guardar el mensaje.";
-        console.error(firestoreErrorDetails);
-    }
-
-
-    // Final user feedback
-    if (firestoreSuccessful && n8nSuccessful) {
       toast({
-        title: "Mensaje Enviado y Notificado",
-        description: "Gracias por contactarnos. Tu mensaje ha sido recibido y notificado.",
-        variant: "success",
-      });
-      setFormData({ name: '', email: '', message: '' });
-    } else if (firestoreSuccessful && !n8nSuccessful) {
-      toast({
-        title: "Mensaje Guardado, Fallo en Notificación",
-        description: `Tu mensaje fue guardado, pero hubo un problema con el sistema de notificación externo. ${n8nErrorDetails}`,
-        variant: "default",
-      });
-      setFormData({ name: '', email: '', message: '' }); // Still clear form as it's saved
-    } else if (!firestoreSuccessful && n8nSuccessful) {
-      toast({
-        title: "Notificación Enviada, Fallo al Guardar",
-        description: `Tu mensaje fue notificado, pero no se pudo guardar en nuestra base de datos. ${firestoreErrorDetails}`,
-        variant: "destructive",
-      });
-    } else { // Both failed
-      toast({
-        title: "Error al Enviar Mensaje",
-        description: `No se pudo guardar ni notificar tu mensaje. ${firestoreErrorDetails} ${n8nErrorDetails}`,
+        title: "Error de Red",
+        description: `No se pudo conectar con el sistema de notificación. ${n8nErrorDetails}`,
         variant: "destructive",
       });
     }
