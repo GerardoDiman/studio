@@ -1,6 +1,9 @@
 {
   "/admin/contact-messages/page": "app/admin/contact-messages/page.js",
+  "/faq/page": "app/faq/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/page": "app/page.js",
-  "/recomendacion-ia/page": "app/recomendacion-ia/page.js"
+  "/recomendacion-ia/page": "app/recomendacion-ia/page.js",
+  "/tecnologias/page": "app/tecnologias/page.js",
+  "/testimonios/page": "app/testimonios/page.js"
 }
